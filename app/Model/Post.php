@@ -3,7 +3,6 @@
 namespace App\Model;
 
 use App\Scopes\UserScope;
-use App\User;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
@@ -14,7 +13,6 @@ class Post extends Model
     protected $fillable = [
         'slug', 'title', 'desc','status','user_id','category_id'
     ];
-
 
     public static function boot()
     {
@@ -37,15 +35,17 @@ class Post extends Model
         return $this->belongsToMany(Gallery::class,'gallery_post');
 
     }
-    
+
     public function images()
     {
         return $this->hasMany(Image::class,'post_id');
     }
+
     public function attachments()
     {
         return $this->hasMany(Attachment::class,'post_id');
     }
+
     public function category()
     {
         return $this->belongsTo(Category::class);

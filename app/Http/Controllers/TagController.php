@@ -2,27 +2,12 @@
 
 namespace App\Http\Controllers;
 
-use App\Enums\postStatusEnum;
-use App\Http\Requests\PostRequest;
 use App\Http\Requests\TagRequest;
-use App\Model\Attachment;
-use App\Model\Image;
-use App\Model\Post;
 use App\Model\Tag;
-use App\Repositories\PostRepository;
-use App\Traits\ApiResponseTrait;
-use Dotenv\Result\Success;
 use Illuminate\Http\Request;
 
 class TagController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    use ApiResponseTrait;
-
     public function __construct()
     {
         $this->middleware(['role:sys_admin']);
@@ -33,7 +18,7 @@ class TagController extends Controller
         $search = $request->input('search');
 
         $tags = Tag::when($search , function ($q) use ($search) {
-                    return 
+                    return
                     $q->where('id', $search)
                     ->orWhere('desc', 'LIKE', "%{$search}%")
                     ->orWhere('name', 'LIKE', "%{$search}%");
@@ -66,7 +51,7 @@ class TagController extends Controller
     {
         return  $this->successResponse($tag);
     }
-    
+
 
     /**
      * Show the form for editing the specified resource.

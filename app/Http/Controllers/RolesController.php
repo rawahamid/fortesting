@@ -8,18 +8,14 @@ use Spatie\Permission\Models\Role;
 
 class RolesController extends Controller
 {
-    use ApiResponseTrait;
-
     /**
      * Display a listing of the resource.
      *
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\Http\JsonResponse
      */
-    public function index()
+    public function index(): \Illuminate\Http\JsonResponse
     {
         $roles = Role::all();
         return $this->successResponse($roles);
     }
-
-  
 }

@@ -3,10 +3,11 @@
 namespace App\Traits;
 
 use Symfony\Component\HttpFoundation\Response;
+use Illuminate\Http\JsonResponse;
 
 trait ApiResponseTrait
 {
-    public function notFoundResponse($message='Not found' )
+    public function notFoundResponse($message='Not found' ): JsonResponse
     {
         return response()->json([
             'success' => false,
@@ -15,7 +16,7 @@ trait ApiResponseTrait
         ], Response::HTTP_NOT_FOUND);
     }
 
-    public function successResponse($data, $message = 'Ok')
+    public function successResponse($data, $message = 'Ok'): JsonResponse
     {
         return response()->json([
             'success' => true,
@@ -24,7 +25,7 @@ trait ApiResponseTrait
         ], Response::HTTP_OK);
     }
 
-    public function serverErrorResponse($message = 'Server Error')
+    public function serverErrorResponse($message = 'Server Error'): JsonResponse
     {
         return response()->json([
             'success' => false,
@@ -32,7 +33,7 @@ trait ApiResponseTrait
         ], Response::HTTP_INTERNAL_SERVER_ERROR);
     }
 
-    public function invalidDataResponse($message = 'Invalid data')
+    public function invalidDataResponse($message = 'Invalid data'): JsonResponse
     {
         return \response()->json([
             'success' => false,
@@ -40,13 +41,11 @@ trait ApiResponseTrait
         ], Response::HTTP_UNPROCESSABLE_ENTITY);
     }
 
-    public function unAuthorizedResponse($message = 'Unauthorized')
+    public function unAuthorizedResponse($message = 'Unauthorized'): JsonResponse
     {
         return \response()->json([
            'success' => false,
            'message' => $message
         ], Response::HTTP_UNAUTHORIZED);
     }
-
-
 }

@@ -23,6 +23,7 @@ class CategoriesRequest extends FormRequest
      */
     public function rules()
     {
+        // ! If I change only description will get error
         return [
             'name'=>'required|min:2|max:100|unique:categories,name'.$this->category,
             'desc'=>'required|min:2|max:100',

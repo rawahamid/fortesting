@@ -1,38 +1,23 @@
 <?php
 
-use App\Http\Controllers\AuthController;
-use App\Http\Controllers\CategoriesController;
-use App\Http\Controllers\GalleryController;
-use App\Http\Controllers\PostController;
-use App\Http\Controllers\RolesController;
-use App\Http\Controllers\TagController;
-use Illuminate\Http\Request;
+use App\Http\Controllers\{
+    AuthController, CategoriesController, GalleryController,
+    PostController, RolesController, TagController
+};
 use Illuminate\Support\Facades\Route;
-
-/*
-|--------------------------------------------------------------------------
-| API Routes
-|--------------------------------------------------------------------------
-|
-| Here is where you can register API routes for your application. These
-| routes are loaded by the RouteServiceProvider within a group which
-| is assigned the "api" middleware group. Enjoy building your API!
-|
-*/
 
 Route::post('/login', [AuthController::class,'Login']);
 Route::post('/guest-signup', [AuthController::class,'Signup']);
 
-Route::group([
-    'middleware' => 'auth:api',
-    'prefix' => 'dashboard',
-], function () {
+Route::group(['middleware' => 'auth:api', 'prefix' => 'dashboard'], function () {
 
     //  crud tag
-    Route::get('/tags', [TagController::class,'index']);
-    Route::post('/tags', [TagController::class,'store']);
-    Route::put('/tags/{tag}', [TagController::class,'update']);
-    Route::delete('/tags/{tag}', [TagController::class,'destroy']);
+    Route::group(['prefix' => 'tags'], function () {
+        Route::get('/',         [TagController::class, 'index']);
+        Route::post('/',        [TagController::class, 'store']);
+        Route::put('/{tag}',    [TagController::class, 'update']);
+        Route::delete('/{tag}', [TagController::class, 'destroy']);
+    });
 
     //  crud categories
     Route::get('/categories', [CategoriesController::class,'index']);

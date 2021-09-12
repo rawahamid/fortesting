@@ -11,16 +11,14 @@ use Illuminate\Support\Facades\Storage;
 
 class GalleryController extends Controller
 {
-    
-    use ApiResponseTrait;
     public function __construct()
     {
         $this->middleware(['role:sys_admin']);
     }
-    
+
     public function index(Request $request)
     {
-        
+
         $gallery = Gallery::orderBy('id','desc')->paginate(10);
 
         return $this->successResponse($gallery);
@@ -28,7 +26,7 @@ class GalleryController extends Controller
 
     public function store(GalleryRequest $galleryRequest)
     {
-        //  you can check if image count dosent more than 100 
+        //  you can check if image count dosent more than 100
 
         $gallery = new Gallery();
         $gallery->title   = $galleryRequest->title;

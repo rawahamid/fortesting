@@ -2,15 +2,13 @@
 
 namespace App\Model;
 
-use App\Model\Post;
-
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Laravel\Passport\HasApiTokens;
-use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Support\Facades\Hash;
 use Spatie\Permission\Traits\HasRoles;
- 
+
 class User extends Authenticatable
 {
     use Notifiable,HasRoles,HasApiTokens;
@@ -33,20 +31,20 @@ class User extends Authenticatable
         'password', 'remember_token',
     ];
 
-    public function setPasswordAttribute($password)
+    public function setPasswordAttribute($password): void
     {
         $this->attributes['password'] = Hash::make($password);
     }
 
-    public function posts()
+    public function posts(): HasMany
     {
-        $this->hasMany(Post::class,'user_id');
+        return $this->hasMany(Post::class,'user_id');
     }
 
-    public function gallery()
+    public function gallery(): HasMany
     {
         return $this->hasMany(Gallery::class,'user_id');
     }
 
-    
+
 }

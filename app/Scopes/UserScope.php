@@ -2,46 +2,27 @@
 
 namespace App\Scopes;
 
-use App\Enums\postStatusEnum;
-use App\Enums\userTypeEnum;
-use App\Model\User;
+use App\Enums\PostStatusEnum;
+use App\Enums\UserTypeEnum;
 use Illuminate\Database\Eloquent\Scope;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Support\Facades\Auth;
 
 class UserScope implements Scope
 {
-    /**
-     * To be sure that the model applying the scope does or doesn't have branch_id
-     * @var bool
-     */
-
     public function __construct()
     { }
 
-    /**
-     * Apply the scope to a given Eloquent query builder.
-     *
-     * @param \Illuminate\Database\Eloquent\Builder $builder
-     * @param \Illuminate\Database\Eloquent\Model $model
-     * @return void
-     */
-    public function apply(Builder $builder, Model $model)
+    public function apply(Builder $builder, Model $model): void
     {
-
-
-        $user = auth('api')->user() ?? null;
+        $user = auth('api')->user();
         /// if the user guest
-        if ($user == null || $user->hasRole(userTypeEnum::Guest)) {
-            $builder->where('status', postStatusEnum::Publish);
-        } 
+        if ($user === null || $user->hasRole(userTypeEnum::GUEST)) {
+            $builder->where('status', postStatusEnum::PUBLISH);
+        }
+
         /// if uesr admin return all
-        else if ($user->hasRole(userTypeEnum::Admin)) {
-                 
-        } 
-        /// if user author return only the user post
-        else {
+        if (!$user->hasRole(userTypeEnum::ADMIN)) {
             $builder->where('user_id', $user->id);
         }
     }

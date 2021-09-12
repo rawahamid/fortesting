@@ -5,36 +5,29 @@ namespace App\Http\Controllers;
 use App\Http\Requests\AdminRequest;
 use App\Http\Requests\SignupRequest;
 use App\Model\User;
-use App\Traits\ApiResponseTrait;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
 class AuthController extends Controller
 {
-    use ApiResponseTrait;
-    
     public function Login(Request $request)
     {
-        
-        if(Auth::attempt(['email' => $request->email, 'password' => $request->password]))
-        {
-            
-            $user = User::where('email',$request->email)->first();
+        if(Auth::attempt(['email' => $request->email, 'password' => $request->password])){
+            $user = Auth::user();
+            abort_if(!$user, 404);
             $access = $user->createToken('authToken')->accessToken;
             $user['accessToken'] = $access ;
-        }
-        else 
+        } else {
             return $this->notFoundResponse('Invalid Enterd Credentials');
-
+        }
         return $this->successResponse($user);
     }
-
 
     public function CreateAdmin(AdminRequest $request)
     {
         $user = User::create($request->validated());
         $user->assignRole($request->type);
-        
+
         return $this->successResponse($user);
     }
 
@@ -46,7 +39,7 @@ class AuthController extends Controller
         $user->password = $request->password;
         $user->save();
         $user->assignRole('guest');
-        
+
         if(Auth::attempt(['email' => $request->email, 'password' => $request->password]))
         {
             $user = User::where('email',$request->email)->first();
